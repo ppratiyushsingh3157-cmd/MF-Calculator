@@ -16,7 +16,7 @@ Advanced investment comparison tool for Indian investors.
    - SWP/Dividends (10% return)
 
 ## Live Demo
-👉 [Open Calculator](https://ppratyushsingh3157-cmd.github.io/MF-Calculator/)
+👉 [Open Calculator](https://ppratiyushsingh3157-cmd.github.io/MF-Calculator/)
 
 ## Tech Stack
 - HTML5 | CSS3 | Vanilla JavaScript
