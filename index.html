@@ -260,6 +260,7 @@
             <button class="tab-button" onclick="switchTab('tax')">Tax Calculator</button>
             <button class="tab-button" onclick="switchTab('comparison')">MF vs Stock</button>
             <button class="tab-button" onclick="switchTab('goal')">Goal Planner</button>
+            <button class="tab-button" onclick="switchTab('investment-comparison')">💰 Investment Comparison</button>
         </div>
 
         <!-- SIP Calculator -->
@@ -426,8 +427,10 @@
                 <div class="input-group">
                     <label>Expected MF Return (%)</label>
                     <input type="number" id="compMFReturn" value="12" min="0" max="50" step="0.1">
-                </div>
-            </div>
+                </div> class="input-group">
+                 <label>Expected Nifty50 Annual Return (%)</label>
+                    <input type="number" id="compNiftyReturn" value="15" min="0" max="50" step="0.1">
+                   </div>
             <button class="calculate" onclick="calculateComparison()">Compare</button>
 
             <div id="compResults" class="hidden">
@@ -497,6 +500,94 @@
         </div>
 
     </div>
+<!-- Investment Comparison -->
+<div id="investment-comparison" class="tab-content">
+  <h2>💰 Compare All Investments</h2>
+  
+  <div class="input-row">
+    <div class="input-group">
+      <label>Monthly Investment (₹)</label>
+      <input type="number" id="investMonthly" value="5000" min="100" step="500">
+    </div>
+    <div class="input-group">
+      <label>Investment Period (Years)</label>
+      <input type="number" id="investYears" value="10" min="1" max="50">
+    </div>
+  </div>
+
+  <button class="calculate" onclick="calculateInvestmentComparison()">Compare All Investments</button>
+
+  <div id="investResults" class="hidden">
+    <div class="results">
+      <div class="result-card primary">
+        <div class="result-label">Mutual Fund (12%)</div>
+        <div class="result-value" id="investMF">₹0</div>
+      </div>
+      <div class="result-card success">
+        <div class="result-label">PPF (8.7%)</div>
+        <div class="result-value" id="investPPF">₹0</div>
+      </div>
+      <div class="result-card warning">
+        <div class="result-label">EPF (8.15%)</div>
+        <div class="result-value" id="investEPF">₹0</div>
+      </div>
+      <div class="result-card info">
+        <div class="result-label">FD (6.5%)</div>
+        <div class="result-value" id="investFD">₹0</div>
+      </div>
+      <div class="result-card danger">
+        <div class="result-label">SWP (10%)</div>
+        <div class="result-value" id="investSWP">₹0</div>
+      </div>
+    </div>
+
+    <table class="comparison-table" style="margin-top: 30px; width: 100%; border-collapse: collapse;">
+      <tr style="background: #f0f0f0;">
+        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Investment</th>
+        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Return %</th>
+        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Tax</th>
+        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Maturity</th>
+        <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Best For</th>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border: 1px solid #ddd;">Mutual Fund</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">12%</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">LTCG 20%</td>
+        <td style="padding: 12px; border: 1px solid #ddd;" id="mfTotal">₹0</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">Growth</td>
+      </tr>
+      <tr style="background: #f9f9f9;">
+        <td style="padding: 12px; border: 1px solid #ddd;">PPF</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">8.7%</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">Tax-Free</td>
+        <td style="padding: 12px; border: 1px solid #ddd;" id="ppfTotal">₹0</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">Safety</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border: 1px solid #ddd;">EPF</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">8.15%</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">Tax-Free</td>
+        <td style="padding: 12px; border: 1px solid #ddd;" id="epfTotal">₹0</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">Retirement</td>
+      </tr>
+      <tr style="background: #f9f9f9;">
+        <td style="padding: 12px; border: 1px solid #ddd;">FD</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">6.5%</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">Taxable</td>
+        <td style="padding: 12px; border: 1px solid #ddd;" id="fdTotal">₹0</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">Safety</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border: 1px solid #ddd;">SWP</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">10%</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">LTCG 20%</td>
+        <td style="padding: 12px; border: 1px solid #ddd;" id="swpTotal">₹0</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">Income</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
 
     <footer>
         <p>📊 Mutual Fund Calculator | Made with ❤️ for Indian Investors</p>
@@ -622,7 +713,7 @@
             const monthly = parseFloat(document.getElementById('compMonthly').value);
             const years = parseFloat(document.getElementById('compYears').value);
             const mfRate = parseFloat(document.getElementById('compMFReturn').value) / 100 / 12;
-            const niftyRate = 0.15 / 12; // 15% annual for Nifty50
+            const niftyRate = parseFloat(document.getElementById('compNiftyReturn').value) / 100 / 12;
             const months = years * 12;
 
             // MF value
@@ -632,8 +723,7 @@
             const niftyValue = monthly * (((Math.pow(1 + niftyRate, months) - 1) / niftyRate) * (1 + niftyRate));
 
             const difference = Math.abs(mfValue - niftyValue);
-            const better = mfValue > niftyValue ? 'Nifty50' : 'MF';
-
+            const better = mfValue > niftyValue ? 'MF' : 'Nifty50';
             document.getElementById('compMFValue').textContent = formatCurrency(mfValue);
             document.getElementById('compNiftyValue').textContent = formatCurrency(niftyValue);
             document.getElementById('compDifference').textContent = formatCurrency(difference);
@@ -785,6 +875,37 @@
                 }
             });
         }
+function calculateInvestmentComparison() {
+  const monthly = parseFloat(document.getElementById('investMonthly').value);
+  const years = parseFloat(document.getElementById('investYears').value);
+  const months = years * 12;
+
+  const mfRate = 0.12 / 12;
+  const ppfRate = 0.087 / 12;
+  const epfRate = 0.0815 / 12;
+  const fdRate = 0.065 / 12;
+  const swpRate = 0.10 / 12;
+
+  const mf = monthly * (((Math.pow(1 + mfRate, months) - 1) / mfRate) * (1 + mfRate));
+  const ppf = monthly * (((Math.pow(1 + ppfRate, months) - 1) / ppfRate) * (1 + ppfRate));
+  const epf = monthly * (((Math.pow(1 + epfRate, months) - 1) / epfRate) * (1 + epfRate));
+  const fd = monthly * (((Math.pow(1 + fdRate, months) - 1) / fdRate) * (1 + fdRate));
+  const swp = monthly * (((Math.pow(1 + swpRate, months) - 1) / swpRate) * (1 + swpRate));
+
+  document.getElementById('investMF').textContent = formatCurrency(mf);
+  document.getElementById('investPPF').textContent = formatCurrency(ppf);
+  document.getElementById('investEPF').textContent = formatCurrency(epf);
+  document.getElementById('investFD').textContent = formatCurrency(fd);
+  document.getElementById('investSWP').textContent = formatCurrency(swp);
+
+  document.getElementById('mfTotal').textContent = formatCurrency(mf);
+  document.getElementById('ppfTotal').textContent = formatCurrency(ppf);
+  document.getElementById('epfTotal').textContent = formatCurrency(epf);
+  document.getElementById('fdTotal').textContent = formatCurrency(fd);
+  document.getElementById('swpTotal').textContent = formatCurrency(swp);
+
+  document.getElementById('investResults').classList.remove('hidden');
+}        
     </script>
 </body>
 </html>
