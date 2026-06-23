@@ -261,6 +261,7 @@
             <button class="tab-button" onclick="switchTab('comparison')">MF vs Stock</button>
             <button class="tab-button" onclick="switchTab('goal')">Goal Planner</button>
             <button class="tab-button" onclick="switchTab('investment-comparison')">💰 Investment Comparison</button>
+            <button class="tab-button" onclick="switchTab('recommendation')">🤖 Smart Recommendation</button>
         </div>
 
         <!-- SIP Calculator -->
@@ -587,6 +588,54 @@
     </table>
   </div>
 </div>
+<!-- Smart Recommendation -->
+<div id="recommendation" class="tab-content">
+  <h2>🤖 Smart Investment Recommendation</h2>
+  
+  <div class="input-row">
+    <div class="input-group">
+      <label>What's your age group?</label>
+      <select id="ageGroup">
+        <option>Select...</option>
+        <option value="student">Student (18-25)</option>
+        <option value="young">Young Professional (25-35)</option>
+        <option value="mid">Mid-Career (35-50)</option>
+        <option value="near">Near Retirement (50-60)</option>
+        <option value="retired">Retired (60+)</option>
+      </select>
+    </div>
+    
+    <div class="input-group">
+      <label>Risk Appetite?</label>
+      <select id="riskProfile">
+        <option>Select...</option>
+        <option value="high">High Risk (Growth focused)</option>
+        <option value="medium">Medium Risk (Balanced)</option>
+        <option value="low">Low Risk (Safety focused)</option>
+      </select>
+    </div>
+    
+    <div class="input-group">
+      <label>Investment Time Horizon?</label>
+      <select id="timeHorizon">
+        <option>Select...</option>
+        <option value="short">0-5 Years</option>
+        <option value="medium">5-10 Years</option>
+        <option value="long">10+ Years</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="calculate" onclick="getRecommendation()">Get Personalized Recommendation</button>
+
+  <div id="recResults" class="hidden">
+    <div style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin-top: 20px;">
+      <h3 id="recTitle" style="color: #2c3e50; margin-bottom: 10px;"></h3>
+      <p id="recDescription" style="color: #34495e; line-height: 1.6;"></p>
+      <div id="recDetails" style="margin-top: 15px; padding: 15px; background: white; border-radius: 8px;"></div>
+    </div>
+  </div>
+</div>
 
 
     <footer>
@@ -905,7 +954,126 @@ function calculateInvestmentComparison() {
   document.getElementById('swpTotal').textContent = formatCurrency(swp);
 
   document.getElementById('investResults').classList.remove('hidden');
-}        
+}
+
+function getRecommendation() {
+  const age = document.getElementById('ageGroup').value;
+  const risk = document.getElementById('riskProfile').value;
+  const horizon = document.getElementById('timeHorizon').value;
+  
+  if (!age || !risk || !horizon) {
+    alert('Please select all fields!');
+    return;
+  }
+
+  let title = '';
+  let description = '';
+  let details = '';
+
+  // Student Logic
+  if (age === 'student') {
+    if (risk === 'high' && (horizon === 'medium' || horizon === 'long')) {
+      title = '✅ Perfect for SIP in Mutual Funds!';
+      description = 'You have time on your side! Start with SIP to build wealth long-term.';
+      details = `<strong>Recommended:</strong> Mutual Funds (12% return)<br>
+                 <strong>Why:</strong> You can ride market volatility and benefit from compounding<br>
+                 <strong>Action:</strong> Start with ₹1,000-5,000 SIP monthly`;
+    } else {
+      title = '💡 Start with Balanced Approach';
+      description = 'Mix growth with some safety as you build your investment journey.';
+      details = `<strong>Recommended:</strong> 70% Mutual Funds + 30% PPF<br>
+                 <strong>Why:</strong> Balance growth with tax-free safety<br>
+                 <strong>Action:</strong> ₹3,500 SIP in MF + ₹1,500 PPF`;
+    }
+  }
+
+  // Young Professional Logic
+  else if (age === 'young') {
+    if (risk === 'high') {
+      title = '🚀 Aggressive Growth Strategy';
+      description = 'Maximize growth with high-risk, high-return investments.';
+      details = `<strong>Recommended:</strong> 80% Mutual Funds + 20% SWP<br>
+                 <strong>Why:</strong> Still 30+ years to retirement, ride the gains<br>
+                 <strong>Action:</strong> ₹4,000 SIP in MF + ₹1,000 SWP`;
+    } else if (risk === 'medium') {
+      title = '⚖️ Balanced Growth';
+      description = 'Mix equity growth with stability.';
+      details = `<strong>Recommended:</strong> 60% MF + 30% PPF + 10% FD<br>
+                 <strong>Why:</strong> Diversified approach for steady wealth building<br>
+                 <strong>Action:</strong> ₹3,000 MF + ₹1,500 PPF + ₹500 FD`;
+    } else {
+      title = '🛡️ Conservative with Growth';
+      description = 'Safety first, but still capture some growth.';
+      details = `<strong>Recommended:</strong> 40% MF + 40% PPF + 20% FD<br>
+                 <strong>Why:</strong> Low-risk with tax-free returns<br>
+                 <strong>Action:</strong> ₹2,000 MF + ₹2,000 PPF + ₹1,000 FD`;
+    }
+  }
+
+  // Mid-Career Logic
+  else if (age === 'mid') {
+    if (risk === 'high') {
+      title = '📈 Growth-Focused Portfolio';
+      description = 'Still time to build wealth aggressively.';
+      details = `<strong>Recommended:</strong> 70% Mutual Funds + 30% SWP<br>
+                 <strong>Why:</strong> 15-20 years of growth ahead<br>
+                 <strong>Action:</strong> ₹3,500 SIP in MF + ₹1,500 SWP`;
+    } else if (risk === 'medium') {
+      title = '💼 Balanced Mid-Career Strategy';
+      description = 'Balance growth with retirement planning.';
+      details = `<strong>Recommended:</strong> 50% MF + 40% PPF + 10% FD<br>
+                 <strong>Why:</strong> Secure retirement while capturing growth<br>
+                 <strong>Action:</strong> ₹2,500 MF + ₹2,000 PPF + ₹500 FD`;
+    } else {
+      title = '🏦 Retirement-Focused Safety';
+      description = 'Protect wealth while planning for retirement.';
+      details = `<strong>Recommended:</strong> 30% MF + 50% PPF + 20% FD<br>
+                 <strong>Why:</strong> Tax-free PPF + Safe FDs for retirement<br>
+                 <strong>Action:</strong> ₹1,500 MF + ₹2,500 PPF + ₹1,000 FD`;
+    }
+  }
+
+  // Near Retirement Logic
+  else if (age === 'near') {
+    if (risk === 'high') {
+      title = '⚡ Final Growth Push';
+      description = 'Last chance for growth before retirement.';
+      details = `<strong>Recommended:</strong> 50% MF + 30% PPF + 20% SWP<br>
+                 <strong>Why:</strong> Balance last growth with safety<br>
+                 <strong>Action:</strong> ₹2,500 MF + ₹1,500 PPF + ₹1,000 SWP`;
+    } else if (risk === 'medium') {
+      title = '🎯 Pre-Retirement Balanced Plan';
+      description = 'Lock in gains while preparing for income.';
+      details = `<strong>Recommended:</strong> 35% MF + 45% PPF + 20% SWP<br>
+                 <strong>Why:</strong> Mix growth with stable income sources<br>
+                 <strong>Action:</strong> ₹1,750 MF + ₹2,250 PPF + ₹1,000 SWP`;
+    } else {
+      title = '🛡️ Capital Preservation';
+      description = 'Focus on protecting wealth for retirement.';
+      details = `<strong>Recommended:</strong> 20% MF + 50% PPF + 30% FD<br>
+                 <strong>Why:</strong> Maximum safety with tax-free PPF<br>
+                 <strong>Action:</strong> ₹1,000 MF + ₹2,500 PPF + ₹1,500 FD`;
+    }
+  }
+
+  // Retired Logic
+  else if (age === 'retired') {
+    title = '💰 Retirement Income Focus';
+    description = 'Generate steady income with minimal risk.';
+    details = `<strong>Recommended:</strong> 20% SWP + 50% PPF + 30% FD<br>
+               <strong>Why:</strong> SWP for income, PPF for tax-free safety<br>
+               <strong>Action:</strong> ₹1,000 SWP + ₹2,500 PPF + ₹1,500 FD`;
+  }
+
+  // Display Results
+  document.getElementById('recTitle').textContent = title;
+  document.getElementById('recDescription').textContent = description;
+  document.getElementById('recDetails').innerHTML = details;
+  document.getElementById('recResults').classList.remove('hidden');
+  
+  // Smooth scroll to results
+  document.getElementById('recResults').scrollIntoView({ behavior: 'smooth' });
+}
     </script>
 </body>
 </html>
